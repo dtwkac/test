@@ -1,0 +1,63 @@
+name: macOS
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+    - name: macOS info
+      run: |
+        system_profiler SPHardwareDataType SPSoftwareDataType
+        set -e
+        echo "========== 系统基本信息 =========="
+        echo "主机名        : $(hostname)"
+        echo "CPU 架构      : $(uname -m)"     # arm64 / x86_64
+        echo "内核版本      : $(uname -r)"
+        
+        echo
+        echo "========== 硬件信息 =========="
+        echo "机器型号      : $(sysctl -n hw.model 2>/dev/null || echo 未知)"
+        echo "CPU 核心数    : $(sysctl -n hw.ncpu)"
+        
+        # 内存大小（字节 → GB）
+        MEM_BYTES=$(sysctl -n hw.memsize)
+        MEM_GB=$(( MEM_BYTES / 1024 / 1024 / 1024 ))
+        echo "内存容量      : ${MEM_GB} GB"
+        
+        # 判断 Apple 芯片还是 Intel
+        if [[ "$(uname -m)" == "arm64" ]]; then
+          echo "处理器类型    : Apple Silicon（M 系列）"
+        else
+          echo "处理器型号    : $(sysctl -n machdep.cpu.brand_string)"
+        fi
+        
+        echo
+        echo "========== macOS 系统信息 =========="
+        echo "系统名称      : $(sw_vers -productName)"
+        echo "系统版本      : $(sw_vers -productVersion)"
+        echo "系统构建号    : $(sw_vers -buildVersion)"
+        
+        echo
+        echo "========== 磁盘信息 =========="
+        # 只查看根分区，避免输出过多
+        df -h / | awk 'NR==1 || NR==2 {print}'
+        
+        echo
+        echo "========== Xcode 开发环境 =========="
+        if xcode-select -p >/dev/null 2>&1; then
+          xcodebuild -version
+        else
+          echo "Xcode         : 未安装"
+        fi
+        
+        echo
+        echo "========== Homebrew 环境 =========="
+        if command -v brew >/dev/null 2>&1; then
+          brew --version | head -n 1
+          # 关键配置，方便判断架构和安装路径
+          brew config | grep -E 'HOMEBREW_VERSION|HOMEBREW_PREFIX|CPU|macOS'
+        else
+          echo "Homebrew      : 未安装"
+        fi
