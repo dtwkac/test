@@ -36,8 +36,6 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           sudo apt-get update
-          sudo apt-get upgrade -y
-          sudo apt-get autoremove -y
           echo core num: $(nproc)
           lscpu
           free -h
