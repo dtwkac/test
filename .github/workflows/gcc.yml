@@ -32,9 +32,10 @@ jobs:
           mkdir build
           cd build
           ../configure --disable-multilib
-          make -j$(nproc)
+          time make -j$(nproc)
 
           cd ~/project
+          rm -rf ~/project/gcc
           gcc_version='12.3.0'
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
           tar -zxf gcc-${gcc_version}.tar.gz
