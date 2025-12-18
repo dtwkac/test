@@ -28,6 +28,7 @@ jobs:
           df -h >> log
           uname -a >> log
           lsb_release -a >> log
+          pwd
           mkdir ~/project
           cd ~/project
           sudo apt-get update
