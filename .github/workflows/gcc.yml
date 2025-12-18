@@ -68,3 +68,4 @@ jobs:
           (time make) 2>> log
           du gcc-releases-gcc-${gcc_version} -h >> log
           df -h >> log
+          cat log
