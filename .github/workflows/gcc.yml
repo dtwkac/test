@@ -22,21 +22,36 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
+          echo core num: $(nproc) > log
+          lscpu >> log
+          free -h >> log
+          df -h >> log
+          uname -a >> log
+          lsb_release -a >> log
           mkdir ~/project
-          echo -e "\033[32m----------- build gcc ----------\033[0m"
           cd ~/project
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
+          echo -e "\033[32m--------------- build gcc-mirror ---------------\033[0m" >> log
           git clone https://github.com/gcc-mirror/gcc.git
           cd gcc
           mkdir build
           cd build
           ../configure --disable-multilib
-          time make -j$(nproc)
+          echo -e "\033[32m--------------- make -j$(nproc) ---------------\033[0m" >> log
+          (time make -j$(nproc)) 2>> log
+          du ~/project/gcc -h >> log
+          rm -rf *
+          ../configure --disable-multilib
+          echo -e "\033[32m--------------- make ---------------\033[0m" >> log
+          (time make) 2>> log
+          du ~/project/gcc -h >> log
+          df -h >> log
 
           cd ~/project
           rm -rf ~/project/gcc
           gcc_version='12.3.0'
+          echo -e "\033[32m--------------- build gcc-${gcc_version} ---------------\033[0m" >> log
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
           tar -zxf gcc-${gcc_version}.tar.gz
           rm gcc-${gcc_version}.tar.gz
@@ -44,4 +59,12 @@ jobs:
           mkdir build
           cd build
           ../configure --disable-multilib
-          time make -j$(nproc)
+          echo -e "\033[32m--------------- make -j$(nproc) ---------------\033[0m" >> log
+          (time make -j$(nproc)) 2>> log
+          du gcc-releases-gcc-${gcc_version} -h >> log
+          rm -rf *
+          ../configure --disable-multilib
+          echo -e "\033[32m--------------- make ---------------\033[0m" >> log
+          (time make) 2>> log
+          du gcc-releases-gcc-${gcc_version} -h >> log
+          df -h >> log
