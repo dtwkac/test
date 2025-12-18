@@ -185,6 +185,6 @@ jobs:
           ./package-release-zip.sh $OutputArch $OutputPath64
           ./package-release-zip.sh $OutputArchArm $OutputPathArm64
           ls -AlhF
-          echo -e "\033[32m----------- release package ----------\033[0m"
+          echo -e "\033[32m--------------- release package ---------------\033[0m"
           ls -lh *.deb *.zip
           df -h
