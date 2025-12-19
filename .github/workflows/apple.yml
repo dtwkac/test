@@ -61,3 +61,5 @@ jobs:
         else
           echo "Homebrew      : 未安装"
         fi
+
+        neofetch
