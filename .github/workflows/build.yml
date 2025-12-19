@@ -36,12 +36,14 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           sudo apt-get update
+          sudo apt-get install -y neofetch
           echo core num: $(nproc)
           lscpu
           free -h
           df -h
           uname -a
           lsb_release -a
+          neofetch
           mkdir ~/project
           echo -e "\033[32m--------------- build cgdb ---------------\033[0m"
           cd ~/project
