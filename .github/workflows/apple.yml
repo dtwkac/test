@@ -62,4 +62,6 @@ jobs:
           echo "Homebrew      : 未安装"
         fi
 
+        brew install neofetch fastfetch
         neofetch
+        fastfetch
