@@ -64,10 +64,10 @@ jobs:
           echo -e "\033[32m--------------- make -j$(nproc) ---------------\033[0m" >> log
           (time make -j$(nproc)) 2>> log
           du -sh gcc-releases-gcc-${gcc_version} >> log
-          rm -rf *
-          ../configure --disable-multilib
-          echo -e "\033[32m--------------- make ---------------\033[0m" >> log
-          (time make) 2>> log
-          du -sh gcc-releases-gcc-${gcc_version} >> log
+          # rm -rf *
+          # ../configure --disable-multilib
+          # echo -e "\033[32m--------------- make ---------------\033[0m" >> log
+          # (time make) 2>> log
+          # du -sh gcc-releases-gcc-${gcc_version} >> log
           df -h >> log
           cat log
