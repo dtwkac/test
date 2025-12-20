@@ -90,6 +90,8 @@ jobs:
           gcc_version='12.3.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make ---------------\033[0m" > gcc-release-make.log
           echo "start: $(date)" >> gcc-release-make.log
+          sudo apt-get update
+          sudo apt-get install -y git g++ libmpc-dev make flex
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
           tar -zxf gcc-${gcc_version}.tar.gz
           rm gcc-${gcc_version}.tar.gz
@@ -116,6 +118,8 @@ jobs:
           gcc_version='12.3.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make -j$(nproc) ---------------\033[0m" > gcc-release-make-j.log
           echo "start: $(date)" >> gcc-release-make-j.log
+          sudo apt-get update
+          sudo apt-get install -y git g++ libmpc-dev make flex
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
           tar -zxf gcc-${gcc_version}.tar.gz
           rm gcc-${gcc_version}.tar.gz
