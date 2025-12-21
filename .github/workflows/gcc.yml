@@ -46,7 +46,7 @@ jobs:
   #         mkdir build
   #         cd build
   #         ../configure --disable-multilib
-  #         (time make) 2>> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         df -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
@@ -71,7 +71,7 @@ jobs:
           mkdir build
           cd build
           ../configure --disable-multilib
-          (time make -j$(nproc)) 2>> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          (time make -j$(nproc) 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           df -h >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
@@ -99,7 +99,7 @@ jobs:
           mkdir build
           cd build
           ../configure --disable-multilib
-          (time make) 2>> ${GITHUB_WORKSPACE}/gcc-release-make.log
+          (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-release-make.log
           du -sh .. >> ${GITHUB_WORKSPACE}/gcc-release-make.log
           df -h >> ${GITHUB_WORKSPACE}/gcc-release-make.log
           echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-release-make.log
@@ -127,7 +127,7 @@ jobs:
           mkdir build
           cd build
           ../configure --disable-multilib
-          (time make -j$(nproc)) 2>> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
+          (time make -j$(nproc) 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
           du -sh .. >> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
           df -h >> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
           echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
