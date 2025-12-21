@@ -12,24 +12,24 @@ jobs:
     steps:
       - name: System info
         run: |
-          echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > system-info.log
-          echo pwd: $(pwd) >> system-info.log
-          echo core num: $(nproc) >> system-info.log
-          echo lscpu: >> system-info.log
-          lscpu >> system-info.log
-          echo free -h: >> system-info.log
-          free -h >> system-info.log
-          echo df -h: >> system-info.log
-          df -h >> system-info.log
-          echo uname -a: >> system-info.log
-          uname -a >> system-info.log
-          echo lsb_release -a: >> system-info.log
-          lsb_release -a >> system-info.log
+          echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > ${GITHUB_WORKSPACE}/system-info.log
+          echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/system-info.log
+          echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/system-info.log
+          echo lscpu: >> ${GITHUB_WORKSPACE}/system-info.log
+          lscpu >> ${GITHUB_WORKSPACE}/system-info.log
+          echo free -h: >> ${GITHUB_WORKSPACE}/system-info.log
+          free -h >> ${GITHUB_WORKSPACE}/system-info.log
+          echo df -h: >> ${GITHUB_WORKSPACE}/system-info.log
+          df -h >> ${GITHUB_WORKSPACE}/system-info.log
+          echo uname -a: >> ${GITHUB_WORKSPACE}/system-info.log
+          uname -a >> ${GITHUB_WORKSPACE}/system-info.log
+          echo lsb_release -a: >> ${GITHUB_WORKSPACE}/system-info.log
+          lsb_release -a >> ${GITHUB_WORKSPACE}/system-info.log
 
       - uses: actions/upload-artifact@v4
         with:
           name: system-info
-          path: system-info.log
+          path: ${{ github.workspace }}/system-info.log
 
   # gcc-master-make:
   #   needs: system-info
@@ -37,8 +37,8 @@ jobs:
   #   steps:
   #     - name: gcc master make
   #       run: |
-  #         echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > gcc-master-make.log
-  #         echo "start: $(date)" >> gcc-master-make.log
+  #         echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         sudo apt-get update
   #         sudo apt-get install -y git g++ libmpc-dev make flex
   #         git clone https://github.com/gcc-mirror/gcc.git
@@ -46,15 +46,15 @@ jobs:
   #         mkdir build
   #         cd build
   #         ../configure --disable-multilib
-  #         (time make) 2>> gcc-master-make.log
-  #         du -sh .. >> gcc-master-make.log
-  #         df -h >> gcc-master-make.log
-  #         echo "end: $(date)" >> gcc-master-make.log
+  #         (time make) 2>> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         df -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
 
   #     - uses: actions/upload-artifact@v4
   #       with:
   #         name: gcc-master-make
-  #         path: gcc-master-make.log
+  #         path: ${{ github.workspace }}/gcc-master-make.log
 
   gcc-master-make-j:
     # needs: gcc-master-make
@@ -62,8 +62,8 @@ jobs:
     steps:
       - name: gcc master make -j$(nproc)
         run: |
-          echo -e "\033[32m--------------- gcc master make -j$(nproc) ---------------\033[0m" > gcc-master-make-j.log
-          echo "start: $(date)" >> gcc-master-make-j.log
+          echo -e "\033[32m--------------- gcc master make -j$(nproc) ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
           git clone https://github.com/gcc-mirror/gcc.git
@@ -71,15 +71,15 @@ jobs:
           mkdir build
           cd build
           ../configure --disable-multilib
-          (time make -j$(nproc)) 2>> gcc-master-make-j.log
-          du -sh .. >> gcc-master-make-j.log
-          df -h >> gcc-master-make-j.log
-          echo "end: $(date)" >> gcc-master-make-j.log
+          (time make -j$(nproc)) 2>> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
 
       - uses: actions/upload-artifact@v4
         with:
           name: gcc-master-make-j
-          path: gcc-master-make-j.log
+          path: ${{ github.workspace }}/gcc-master-make-j.log
 
   gcc-release-make:
     needs: gcc-master-make-j
@@ -88,8 +88,8 @@ jobs:
       - name: gcc release make
         run: |
           gcc_version='12.3.0'
-          echo -e "\033[32m--------------- gcc-${gcc_version} make ---------------\033[0m" > gcc-release-make.log
-          echo "start: $(date)" >> gcc-release-make.log
+          echo -e "\033[32m--------------- gcc-${gcc_version} make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-release-make.log
+          echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-release-make.log
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
@@ -99,15 +99,15 @@ jobs:
           mkdir build
           cd build
           ../configure --disable-multilib
-          (time make) 2>> gcc-release-make.log
-          du -sh .. >> gcc-release-make.log
-          df -h >> gcc-release-make.log
-          echo "end: $(date)" >> gcc-release-make.log
+          (time make) 2>> ${GITHUB_WORKSPACE}/gcc-release-make.log
+          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-release-make.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-release-make.log
+          echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-release-make.log
 
       - uses: actions/upload-artifact@v4
         with:
           name: gcc-release-make
-          path: gcc-release-make.log
+          path: ${{ github.workspace }}/gcc-release-make.log
 
   gcc-release-make-j:
     needs: gcc-release-make
@@ -116,8 +116,8 @@ jobs:
       - name: gcc release make -j$(nproc)
         run: |
           gcc_version='12.3.0'
-          echo -e "\033[32m--------------- gcc-${gcc_version} make -j$(nproc) ---------------\033[0m" > gcc-release-make-j.log
-          echo "start: $(date)" >> gcc-release-make-j.log
+          echo -e "\033[32m--------------- gcc-${gcc_version} make -j$(nproc) ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-release-make-j.log
+          echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
@@ -127,15 +127,15 @@ jobs:
           mkdir build
           cd build
           ../configure --disable-multilib
-          (time make -j$(nproc)) 2>> gcc-release-make-j.log
-          du -sh .. >> gcc-release-make-j.log
-          df -h >> gcc-release-make-j.log
-          echo "end: $(date)" >> gcc-release-make-j.log
+          (time make -j$(nproc)) 2>> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
+          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
+          echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-release-make-j.log
 
       - uses: actions/upload-artifact@v4
         with:
           name: gcc-release-make-j
-          path: gcc-release-make-j.log
+          path: ${{ github.workspace }}/gcc-release-make-j.log
 
   merge-logs:
     needs:
