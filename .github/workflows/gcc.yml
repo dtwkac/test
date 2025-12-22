@@ -6,64 +6,63 @@ on:
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
-jobs:
-  system-info:
-    runs-on: ubuntu-latest
-    steps:
-      - name: System info
-        run: |
-          echo -e "\033[32m--------------- system info ---------------\033[0m" > ${GITHUB_WORKSPACE}/system-info.log
-          echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/system-info.log
-          echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/system-info.log
-          echo lscpu: >> ${GITHUB_WORKSPACE}/system-info.log
-          lscpu >> ${GITHUB_WORKSPACE}/system-info.log
-          echo free -h: >> ${GITHUB_WORKSPACE}/system-info.log
-          free -h >> ${GITHUB_WORKSPACE}/system-info.log
-          echo df -h: >> ${GITHUB_WORKSPACE}/system-info.log
-          df -h >> ${GITHUB_WORKSPACE}/system-info.log
-          echo uname -a: >> ${GITHUB_WORKSPACE}/system-info.log
-          uname -a >> ${GITHUB_WORKSPACE}/system-info.log
-          echo lsb_release -a: >> ${GITHUB_WORKSPACE}/system-info.log
-          lsb_release -a >> ${GITHUB_WORKSPACE}/system-info.log
+  # gcc-master-make:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: gcc master make
+  #       run: |
+  #         echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         lscpu >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo free -h: >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         free -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo df -h: >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         df -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo uname -a: >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         uname -a >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo lsb_release -a: >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         lsb_release -a >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         sudo apt-get update
+  #         sudo apt-get install -y git g++ libmpc-dev make flex
+  #         git clone https://github.com/gcc-mirror/gcc.git
+  #         cd gcc
+  #         mkdir build
+  #         cd build
+  #         ../configure --disable-multilib
+  #         (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         df -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: system-info
-          path: ${{ github.workspace }}/system-info.log
-
-  gcc-master-make:
-    needs: system-info
-    runs-on: ubuntu-latest
-    steps:
-      - name: gcc master make
-        run: |
-          echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make.log
-          echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
-          sudo apt-get update
-          sudo apt-get install -y git g++ libmpc-dev make flex
-          git clone https://github.com/gcc-mirror/gcc.git
-          cd gcc
-          mkdir build
-          cd build
-          ../configure --disable-multilib
-          (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-master-make.log
-          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make.log
-          df -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
-          echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: gcc-master-make
-          path: ${{ github.workspace }}/gcc-master-make.log
+  #     - uses: actions/upload-artifact@v4
+  #       with:
+  #         name: gcc-master-make
+  #         path: ${{ github.workspace }}/gcc-master-make.log
 
   gcc-master-make-j:
-    needs: gcc-master-make
     runs-on: ubuntu-latest
     steps:
       - name: gcc master make -j$(nproc)
         run: |
           echo -e "\033[32m--------------- gcc master make -j$(nproc) ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          lscpu >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo free -h: >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          free -h >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo df -h: >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo uname -a: >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          uname -a >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo lsb_release -a: >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          lsb_release -a >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
           git clone https://github.com/gcc-mirror/gcc.git
@@ -82,7 +81,6 @@ jobs:
           path: ${{ github.workspace }}/gcc-master-make-j.log
 
   gcc-12-3-0-make:
-    needs: gcc-master-make-j
     runs-on: ubuntu-latest
     steps:
       - name: gcc 12.3.0 make
@@ -90,6 +88,19 @@ jobs:
           gcc_version='12.3.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          lscpu >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo free -h: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          free -h >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo df -h: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo uname -a: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          uname -a >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo lsb_release -a: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          lsb_release -a >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
@@ -110,7 +121,6 @@ jobs:
           path: ${{ github.workspace }}/gcc-12-3-0-make.log
 
   gcc-12-3-0-make-j:
-    needs: gcc-12-3-0-make
     runs-on: ubuntu-latest
     steps:
       - name: gcc 12.3.0 make -j$(nproc)
@@ -118,6 +128,19 @@ jobs:
           gcc_version='12.3.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make -j$(nproc) ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          lscpu >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo free -h: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          free -h >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo df -h: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo uname -a: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          uname -a >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo lsb_release -a: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          lsb_release -a >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
@@ -138,7 +161,6 @@ jobs:
           path: ${{ github.workspace }}/gcc-12-3-0-make-j.log
 
   gcc-15-2-0-make:
-    needs: gcc-12-3-0-make-j
     runs-on: ubuntu-latest
     steps:
       - name: gcc 15.2.0 make
@@ -146,6 +168,19 @@ jobs:
           gcc_version='15.2.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          lscpu >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo free -h: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          free -h >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo df -h: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo uname -a: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          uname -a >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo lsb_release -a: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          lsb_release -a >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
@@ -174,6 +209,19 @@ jobs:
           gcc_version='15.2.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make -j$(nproc) ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          lscpu >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo free -h: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          free -h >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo df -h: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo uname -a: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          uname -a >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo lsb_release -a: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          lsb_release -a >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
           sudo apt-get update
           sudo apt-get install -y git g++ libmpc-dev make flex
           curl -L -O https://github.com/gcc-mirror/gcc/archive/refs/tags/releases/gcc-${gcc_version}.tar.gz
@@ -195,8 +243,7 @@ jobs:
 
   merge-logs:
     needs:
-      - system-info
-      - gcc-master-make
+      # - gcc-master-make
       - gcc-master-make-j
       - gcc-12-3-0-make
       - gcc-12-3-0-make-j
@@ -208,10 +255,8 @@ jobs:
 
       - name: merge logs
         run: |
-          cat system-info/system-info.log > gcc-build-log.txt
-          echo >> gcc-build-log.txt
-          cat gcc-master-make/gcc-master-make.log >> gcc-build-log.txt
-          echo >> gcc-build-log.txt
+          # cat gcc-master-make/gcc-master-make.log >> gcc-build-log.txt
+          # echo >> gcc-build-log.txt
           cat gcc-master-make-j/gcc-master-make-j.log >> gcc-build-log.txt
           echo >> gcc-build-log.txt
           cat gcc-12-3-0-make/gcc-12-3-0-make.log >> gcc-build-log.txt
@@ -221,7 +266,6 @@ jobs:
           cat gcc-15-2-0-make/gcc-15-2-0-make.log >> gcc-build-log.txt
           echo >> gcc-build-log.txt
           cat gcc-15-2-0-make-j/gcc-15-2-0-make-j.log >> gcc-build-log.txt
-          echo >> gcc-build-log.txt
           cat gcc-build-log.txt
 
       - uses: actions/upload-artifact@v4
