@@ -12,7 +12,7 @@ jobs:
     steps:
       - name: System info
         run: |
-          echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > ${GITHUB_WORKSPACE}/system-info.log
+          echo -e "\033[32m--------------- system info ---------------\033[0m" > ${GITHUB_WORKSPACE}/system-info.log
           echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/system-info.log
           echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/system-info.log
           echo lscpu: >> ${GITHUB_WORKSPACE}/system-info.log
