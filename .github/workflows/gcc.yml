@@ -202,7 +202,6 @@ jobs:
           path: ${{ github.workspace }}/gcc-15-2-0-make.log
 
   gcc-15-2-0-make-j:
-    needs: gcc-15-2-0-make
     runs-on: ubuntu-latest
     steps:
       - name: gcc release make -j$(nproc)
