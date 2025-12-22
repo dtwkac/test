@@ -31,33 +31,33 @@ jobs:
           name: system-info
           path: ${{ github.workspace }}/system-info.log
 
-  # gcc-master-make:
-  #   needs: system-info
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: gcc master make
-  #       run: |
-  #         echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make.log
-  #         echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
-  #         sudo apt-get update
-  #         sudo apt-get install -y git g++ libmpc-dev make flex
-  #         git clone https://github.com/gcc-mirror/gcc.git
-  #         cd gcc
-  #         mkdir build
-  #         cd build
-  #         ../configure --disable-multilib
-  #         (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-master-make.log
-  #         du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make.log
-  #         df -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
-  #         echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  gcc-master-make:
+    needs: system-info
+    runs-on: ubuntu-latest
+    steps:
+      - name: gcc master make
+        run: |
+          echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make.log
+          echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+          sudo apt-get update
+          sudo apt-get install -y git g++ libmpc-dev make flex
+          git clone https://github.com/gcc-mirror/gcc.git
+          cd gcc
+          mkdir build
+          cd build
+          ../configure --disable-multilib
+          (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-master-make.log
+          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+          df -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+          echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
 
-  #     - uses: actions/upload-artifact@v4
-  #       with:
-  #         name: gcc-master-make
-  #         path: ${{ github.workspace }}/gcc-master-make.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gcc-master-make
+          path: ${{ github.workspace }}/gcc-master-make.log
 
   gcc-master-make-j:
-    # needs: gcc-master-make
+    needs: gcc-master-make
     runs-on: ubuntu-latest
     steps:
       - name: gcc master make -j$(nproc)
@@ -140,7 +140,7 @@ jobs:
   merge-logs:
     needs:
       - system-info
-      # - gcc-master-make
+      - gcc-master-make
       - gcc-master-make-j
       - gcc-release-make
       - gcc-release-make-j
