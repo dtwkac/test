@@ -14,7 +14,7 @@ jobs:
   #       run: |
   #         echo -e "\033[32m--------------- gcc master make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
-  #         echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         echo "system info:" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-master-make.log
@@ -51,7 +51,7 @@ jobs:
         run: |
           echo -e "\033[32m--------------- gcc master make -j$(nproc) ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
-          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          echo "system info:" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
@@ -89,7 +89,7 @@ jobs:
           gcc_version='12.3.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
-          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          echo "system info:" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
           echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
           echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
           echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
@@ -129,7 +129,7 @@ jobs:
           gcc_version='12.3.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make -j$(nproc) ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
-          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          echo "system info:" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
           echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
           echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
           echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
@@ -169,7 +169,7 @@ jobs:
           gcc_version='15.2.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
-          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          echo "system info:" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
           echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
           echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
           echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
@@ -210,7 +210,7 @@ jobs:
           gcc_version='15.2.0'
           echo -e "\033[32m--------------- gcc-${gcc_version} make -j$(nproc) ---------------\033[0m" > ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
           echo "start: $(date)" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
-          echo -e "system info:" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          echo "system info:" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
           echo pwd: $(pwd) >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
           echo lscpu: >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
           echo core num: $(nproc) >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
