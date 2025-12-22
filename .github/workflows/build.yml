@@ -42,11 +42,11 @@ jobs:
           run: |
             sudo apt-get update
             sudo apt-get install -y neofetch
-            echo "system info:"
+            echo system info:
             echo pwd: $(pwd)
             echo lscpu:
-            echo core num: $(nproc)
             lscpu
+            echo core num: $(nproc)
             echo free -h:
             free -h
             echo df -h:
