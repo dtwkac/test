@@ -1,0 +1,196 @@
+# This is a basic workflow to help you get started with Actions
+
+name: build
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  # push:
+    # branches: [ "main" ]
+  # pull_request:
+    # branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+  schedule:
+    - cron: '0 21 * * *'
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      # - name: Run a one-line script
+        # run: echo Hello, world!
+
+      # Runs a set of commands using the runners shell
+      # - name: Run a multi-line script
+        # run: |
+          # echo Add other actions to build,
+          # echo test, and deploy your project.
+
+        - name: Build
+          run: |
+            sudo apt-get update
+            sudo apt-get install -y neofetch
+            echo -e "\033[32m--------------- system info ---------------\033[0m"
+            echo core num: $(nproc)
+            lscpu
+            free -h
+            df -h
+            uname -a
+            lsb_release -a
+            neofetch
+            echo -e "\033[32m--------------- build cgdb ---------------\033[0m"
+            sudo apt-get install -y automake gdb flex texinfo libreadline-dev
+            git clone https://github.com/cgdb/cgdb.git
+            cd cgdb
+            ./autogen.sh
+            mkdir build
+            cd build
+            ../configure
+            make -j$(nproc)
+            echo -e "\033[32m--------------- build cpython ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}
+            sudo apt-get install -y build-essential gdb lcov pkg-config \
+                  libbz2-dev libffi-dev libgdbm-dev libgdbm-compat-dev liblzma-dev \
+                  libncurses5-dev libreadline6-dev libsqlite3-dev libssl-dev \
+                  lzma lzma-dev tk-dev uuid-dev zlib1g-dev libzstd-dev \
+                  inetutils-inetd
+            git clone https://github.com/python/cpython.git
+            cd cpython
+            mkdir build
+            cd build
+            ../configure --with-pydebug
+            make -j$(nproc)
+            echo -e "\033[32m--------------- build LearnOpenGL ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}
+            sudo apt-get install -y cmake libsoil-dev libglm-dev libassimp-dev libglew-dev libglfw3-dev libxinerama-dev libxcursor-dev  libxi-dev libfreetype-dev libgl1-mesa-dev xorg-dev
+            git clone https://github.com/JoeyDeVries/LearnOpenGL.git
+            cd LearnOpenGL
+            mkdir build
+            cd build
+            cmake ..
+            cmake --build .
+            echo -e "\033[32m--------------- download go ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}
+            go_version='1.23.1'
+            curl -L -O https://go.dev/dl/go${go_version}.linux-amd64.tar.gz
+            tar -zxf go${go_version}.linux-amd64.tar.gz
+            rm go${go_version}.linux-amd64.tar.gz
+            export PATH=${GITHUB_WORKSPACE}/go/bin:$PATH
+            echo -e "\033[32m--------------- build xray ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}
+            git clone https://github.com/XTLS/Xray-core.git
+            cd Xray-core
+            go mod download
+            CGO_ENABLED=0 go build -o xray -trimpath -ldflags "-s -w -buildid=" ./main
+            echo -e "\033[32m--------------- download c-plus-plus-primer ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}
+            curl -L -O https://www.informit.com/content/images/9780321714114/downloads/GCC_pre_C11.zip
+            unzip -q GCC_pre_C11.zip -d c-plus-plus-primer
+            rm GCC_pre_C11.zip
+            echo -e "\033[32m--------------- download telegram ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}
+            sudo apt-get install -y aapt
+            curl -L -O https://telegram.org/dl/android/apk
+            aapt dump badging apk | grep versionName
+            rm apk
+            echo -e "\033[32m--------------- download dotnet ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}
+            dotnet_sdk_version='8.0.115'
+            curl -L -O https://builds.dotnet.microsoft.com/dotnet/Sdk/${dotnet_sdk_version}/dotnet-sdk-${dotnet_sdk_version}-linux-x64.tar.gz
+            DOTNET_FILE=dotnet-sdk-${dotnet_sdk_version}-linux-x64.tar.gz
+            export DOTNET_ROOT=$(pwd)/.dotnet
+            mkdir -p "$DOTNET_ROOT"
+            tar zxf "$DOTNET_FILE" -C "$DOTNET_ROOT"
+            rm $DOTNET_FILE
+            export PATH=$PATH:$DOTNET_ROOT:$DOTNET_ROOT/tools
+            echo -e "\033[32m--------------- build v2rayN ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}
+            sudo apt-get install -y 7zip imagemagick-6.q16
+            git clone --recursive https://github.com/2dust/v2rayN.git
+            echo -e "\033[32m--------------- build windows desktop ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}/v2rayN/v2rayN
+            OutputArch="windows-64"
+            OutputArchArm="windows-arm64"
+            OutputPath64="${HOME}/project/v2rayN/Release/windows-desktop-64"
+            OutputPathArm64="${HOME}/project/v2rayN/Release/windows-desktop-arm64"
+            dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r win-x64   -p:SelfContained=true -p:EnableWindowsTargeting=true -o $OutputPath64
+            dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r win-arm64 -p:SelfContained=true -p:EnableWindowsTargeting=true -o $OutputPathArm64
+            dotnet publish ./AmazTool/AmazTool.csproj             -c Release -r win-x64   -p:SelfContained=true -p:EnableWindowsTargeting=true -p:PublishTrimmed=true -o $OutputPath64
+            dotnet publish ./AmazTool/AmazTool.csproj             -c Release -r win-arm64 -p:SelfContained=true -p:EnableWindowsTargeting=true -p:PublishTrimmed=true -o $OutputPathArm64
+            echo -e "\033[32m--------------- release zip archive ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}/v2rayN
+            chmod 755 package-release-zip.sh
+            ./package-release-zip.sh $OutputArch $OutputPath64
+            mv "v2rayN-${OutputArch}.zip" "v2rayN-${OutputArch}-desktop.zip"
+            ./package-release-zip.sh $OutputArchArm $OutputPathArm64
+            mv "v2rayN-${OutputArchArm}.zip" "v2rayN-${OutputArchArm}-desktop.zip"
+            echo -e "\033[32m--------------- build windows ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}/v2rayN/v2rayN
+            OutputArch="windows-64"
+            OutputArchArm="windows-arm64"
+            OutputPath64="${HOME}/project/v2rayN/Release/windows-64"
+            OutputPathArm64="${HOME}/project/v2rayN/Release/windows-arm64"
+            OutputPath64Sc="${HOME}/project/v2rayN/Release/windows-64-SelfContained"
+            dotnet publish ./v2rayN/v2rayN.csproj     -c Release -r win-x64   -p:SelfContained=false -p:EnableWindowsTargeting=true -o $OutputPath64
+            dotnet publish ./v2rayN/v2rayN.csproj     -c Release -r win-arm64 -p:SelfContained=false -p:EnableWindowsTargeting=true -o $OutputPathArm64
+            dotnet publish ./v2rayN/v2rayN.csproj     -c Release -r win-x64   -p:SelfContained=true  -p:EnableWindowsTargeting=true -o $OutputPath64Sc
+            dotnet publish ./AmazTool/AmazTool.csproj -c Release -r win-x64   -p:SelfContained=false -p:EnableWindowsTargeting=true -o $OutputPath64
+            dotnet publish ./AmazTool/AmazTool.csproj -c Release -r win-arm64 -p:SelfContained=false -p:EnableWindowsTargeting=true -o $OutputPathArm64
+            dotnet publish ./AmazTool/AmazTool.csproj -c Release -r win-x64   -p:SelfContained=true  -p:EnableWindowsTargeting=true -p:PublishTrimmed=true -o $OutputPath64Sc
+            echo -e "\033[32m--------------- release zip archive ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}/v2rayN
+            chmod 755 package-release-zip.sh
+            ./package-release-zip.sh $OutputArch $OutputPath64
+            ./package-release-zip.sh $OutputArchArm $OutputPathArm64
+            ./package-release-zip.sh "windows-64-SelfContained" $OutputPath64Sc
+            echo -e "\033[32m--------------- build linux ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}/v2rayN/v2rayN
+            OutputArch="linux-64"
+            OutputArchArm="linux-arm64"
+            OutputPath64="${HOME}/project/v2rayN/Release/linux-64"
+            OutputPathArm64="${HOME}/project/v2rayN/Release/linux-arm64"
+            dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r linux-x64   -p:SelfContained=true -o "$OutputPath64"
+            dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r linux-arm64 -p:SelfContained=true -o "$OutputPathArm64"
+            dotnet publish ./AmazTool/AmazTool.csproj             -c Release -r linux-x64   -p:SelfContained=true -p:PublishTrimmed=true -o "$OutputPath64"
+            dotnet publish ./AmazTool/AmazTool.csproj             -c Release -r linux-arm64 -p:SelfContained=true -p:PublishTrimmed=true -o "$OutputPathArm64"
+            cd ${GITHUB_WORKSPACE}/v2rayN
+            echo -e "\033[32m--------------- package debian ---------------\033[0m"
+            release_tag="1.0.0"
+            chmod 755 package-debian.sh
+            ./package-debian.sh $OutputArch $OutputPath64 ${release_tag}
+            ./package-debian.sh $OutputArchArm $OutputPathArm64 ${release_tag}
+            echo -e "\033[32m--------------- package release zip archive ---------------\033[0m"
+            chmod 755 package-release-zip.sh
+            ./package-release-zip.sh $OutputArch $OutputPath64
+            ./package-release-zip.sh $OutputArchArm $OutputPathArm64
+            echo -e "\033[32m--------------- build osx ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}/v2rayN/v2rayN
+            OutputArch="macos-64"
+            OutputArchArm="macos-arm64"
+            OutputPath64="${HOME}/project/v2rayN/Release/macos-64"
+            OutputPathArm64="${HOME}/project/v2rayN/Release/macos-arm64"
+            dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r osx-x64   -p:SelfContained=true -o $OutputPath64
+            dotnet publish ./v2rayN.Desktop/v2rayN.Desktop.csproj -c Release -r osx-arm64 -p:SelfContained=true -o $OutputPathArm64
+            dotnet publish ./AmazTool/AmazTool.csproj             -c Release -r osx-x64   -p:SelfContained=true -p:PublishTrimmed=true -o $OutputPath64
+            dotnet publish ./AmazTool/AmazTool.csproj             -c Release -r osx-arm64 -p:SelfContained=true -p:PublishTrimmed=true -o $OutputPathArm64
+            echo -e "\033[32m--------------- package release zip archive ---------------\033[0m"
+            cd ${GITHUB_WORKSPACE}/v2rayN
+            chmod 755 package-release-zip.sh
+            ./package-release-zip.sh $OutputArch $OutputPath64
+            ./package-release-zip.sh $OutputArchArm $OutputPathArm64
+            ls -AlhF
+            echo -e "\033[32m--------------- release package ---------------\033[0m"
+            ls -lh *.deb *.zip
+            df -h
