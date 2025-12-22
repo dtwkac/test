@@ -42,12 +42,18 @@ jobs:
           run: |
             sudo apt-get update
             sudo apt-get install -y neofetch
-            echo -e "\033[32m--------------- system info ---------------\033[0m"
+            echo "system info:"
+            echo pwd: $(pwd)
+            echo lscpu:
             echo core num: $(nproc)
             lscpu
+            echo free -h:
             free -h
+            echo df -h:
             df -h
+            echo uname -a:
             uname -a
+            echo lsb_release -a:
             lsb_release -a
             neofetch
             echo -e "\033[32m--------------- build cgdb ---------------\033[0m"
