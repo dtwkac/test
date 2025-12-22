@@ -35,7 +35,7 @@ jobs:
   #         cd build
   #         ../configure --disable-multilib
   #         (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-master-make.log
-  #         du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make.log
+  #         du -sh ${GITHUB_WORKSPACE}/gcc >> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         df -h >> ${GITHUB_WORKSPACE}/gcc-master-make.log
   #         echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make.log
 
@@ -72,7 +72,7 @@ jobs:
           cd build
           ../configure --disable-multilib
           (time make -j$(nproc) 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
-          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
+          du -sh ${GITHUB_WORKSPACE}/gcc >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           df -h >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
           echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-master-make-j.log
 
@@ -112,7 +112,7 @@ jobs:
           cd build
           ../configure --disable-multilib
           (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
-          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
+          du -sh ${GITHUB_WORKSPACE}/gcc-releases-gcc-${gcc_version} >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
           df -h >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
           echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make.log
 
@@ -152,7 +152,7 @@ jobs:
           cd build
           ../configure --disable-multilib
           (time make -j$(nproc) 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
-          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
+          du -sh ${GITHUB_WORKSPACE}/gcc-releases-gcc-${gcc_version} >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
           df -h >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
           echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-12-3-0-make-j.log
 
@@ -192,7 +192,7 @@ jobs:
           cd build
           ../configure --disable-multilib
           (time make 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
-          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
+          du -sh ${GITHUB_WORKSPACE}/gcc-releases-gcc-${gcc_version} >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
           df -h >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
           echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make.log
 
@@ -232,7 +232,7 @@ jobs:
           cd build
           ../configure --disable-multilib
           (time make -j$(nproc) 2>/dev/null) 2>> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
-          du -sh .. >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
+          du -sh ${GITHUB_WORKSPACE}/gcc-releases-gcc-${gcc_version} >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
           df -h >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
           echo "end: $(date)" >> ${GITHUB_WORKSPACE}/gcc-15-2-0-make-j.log
 
